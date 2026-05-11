@@ -25,6 +25,17 @@ jobs:
     - name: Build and Publish
       run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="bin\\app.publish\\" /p:VisualStudioVersion="17.0"
 
+    - name: Проверка файлов перед загрузкой
+      run: |
+        if (Test-Path "TechZoneProject/bin/app.publish/") {
+          Write-Host "✅ Папка найдена!"
+          Get-ChildItem "TechZoneProject/bin/app.publish/" | Select-Object -First 10
+        } else {
+          Write-Host "❌ Папка не найдена!"
+          Write-Host "Ищу где могло быть..."
+          Get-ChildItem -Recurse -Directory -Filter "*app.publish*"
+        }
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
@@ -44,6 +55,9 @@ jobs:
       with:
         name: published-app
         path: app.publish/
+
+    - name: List downloaded files
+      run: ls -la app.publish/
 
     - name: Build Docker Image
       run: docker build -t techzone-app:latest .
