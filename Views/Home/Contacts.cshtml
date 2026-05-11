@@ -1,0 +1,66 @@
+﻿@{
+    ViewBag.Title = "Контакты";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main class="container">
+    <h1 class="main-title">Контакты</h1>
+
+    <div class="contacts-grid">
+        <div class="left-column">
+            <section class="white-card contact-info">
+                <h2 class="card-title">Наши контакты</h2>
+                <div class="contact-item">
+                    <span class="icon">📞</span>
+                    <p>Телефон: +7 (3952) 111-222</p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">✉️</span>
+                    <p>Email: info@techzone.ru</p>
+                </div>
+                <div class="contact-item">
+                    <span class="icon">📍</span>
+                    <p>Адрес: г. Иркутск, ул. Ленина, д. 11 (БГУ)</p>
+                </div>
+                <div class="social-tags">
+                    <span>Мы в соцсетях:</span>
+                    <a href="#" class="tag-blue vk">VK</a>
+                    <a href="#" class="tag-blue tg">TG</a>
+                </div>
+            </section>
+
+            <div id="map-section" class="white-card map-container">
+                @* Карта Иркутска (БГУ) *@
+                <script type="text/javascript" charset="utf-8" async
+                        src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Afb3028f0290e106fcb9392a473d7fa7e4aa13da26c8f62d0167d0f803f3ecb24&amp;width=100%25&amp;height=400&amp;lang=ru_RU&amp;scroll=true"></script>
+            </div>
+        </div>
+
+        <section class="white-card form-section">
+            <h2 class="card-title">Напишите нам</h2>
+
+            @using (Html.BeginForm("Contacts", "Home", FormMethod.Post, new { @class = "contact-form" }))
+            {
+                <div class="form-group">
+                    <label>Ваше имя *</label>
+                    <input type="text" name="name" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Электронная почта *</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        <input type="tel" name="phone">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Сообщение</label>
+                    <textarea name="message"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Отправить</button>
+            }
+        </section>
+    </div>
+</main>

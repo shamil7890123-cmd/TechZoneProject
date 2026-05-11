@@ -1,0 +1,58 @@
+﻿@model TechZoneProject.Models.Product
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<main class="container">
+    <nav class="breadcrumb">Главная / Каталог / @Model.Category / @Model.Name</nav>
+    <h1 class="product-main-title">@Model.Name</h1>
+
+    <div class="product-grid-container">
+        <div class="gallery-column">
+            <div class="white-card main-photo-card">
+                <img src="@Url.Content("~/Content/Images/" + Model.ImageUrl)" alt="@Model.Name">
+            </div>
+        </div>
+
+        <div class="info-column">
+            <div class="price-wrapper">
+                <span class="price-label">Цена:</span>
+                <h2 class="price-display">@Model.Price.ToString("N0") ₽</h2>
+                @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post))
+                {
+                    @Html.Hidden("productId", Model.Id)
+                    <button type="submit" class="btn-buy-now">🛒 В корзину</button>
+                }
+            </div>
+
+            <div class="specifications-box">
+                <h3 class="specs-title">Характеристики</h3>
+                <div class="spec-row">
+                    <span class="spec-label">Процессор:</span>
+                    <div class="spec-dots"></div>
+                    <span class="spec-text">@Model.Processor</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Видеокарта:</span>
+                    <div class="spec-dots"></div>
+                    <span class="spec-text">@Model.VideoCard</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">ОЗУ:</span>
+                    <div class="spec-dots"></div>
+                    <span class="spec-text">@Model.RAM</span>
+                </div>
+                <div class="spec-row">
+                    <span class="spec-label">Диск:</span>
+                    <div class="spec-dots"></div>
+                    <span class="spec-text">@Model.Storage</span>
+                </div>
+            </div>
+
+            <div class="description-side">
+                <h3 class="specs-title">Описание</h3>
+                <p class="desc-content">@Model.Description</p>
+            </div>
+        </div>
+    </div>
+</main>

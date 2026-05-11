@@ -1,0 +1,96 @@
+﻿@model IEnumerable<TechZoneProject.Models.Product>
+@{
+    ViewBag.Title = "Каталог";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main class="container">
+    <h1 class="catalog-main-title">Каталог комплектующих</h1>
+
+    <div class="catalog-layout">
+        <aside class="filters-sidebar">
+            <h2 class="filter-main-title">Фильтры</h2>
+
+            @using (Html.BeginForm("Catalog", "Home", FormMethod.Get))
+            {
+                <div class="filter-group">
+                    <label class="filter-label">Категория</label>
+                    <select name="category" class="filter-select">
+                        <option value="">Все категории</option>
+                        <option value="Ноутбуки">Ноутбуки</option>
+                        <option value="Телефоны">Телефоны</option>
+                        <option value="Периферия">Периферия</option>
+                        <option value="ПК">ПК</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Цена, ₽</label>
+                    <div class="price-inputs">
+                        <input type="number" name="minPrice" class="price-input" placeholder="от 0">
+                        <input type="number" name="maxPrice" class="price-input" placeholder="до 200к">
+                    </div>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Бренд</label>
+                    <select name="brand" class="filter-select">
+                        <option value="">Все бренды</option>
+                        <option value="ASUS">ASUS</option>
+                        <option value="MSI">MSI</option>
+                        <option value="Apple">Apple</option>
+                        <option value="Logitech">Logitech</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-apply">Применить</button>
+                <a href="@Url.Action("Catalog", "Home")" class="btn-reset" style="display:block; text-align:center; margin-top:10px; font-size:12px; color:#999; text-decoration:none;">Сбросить фильтры</a>
+            }
+        </aside>
+
+        <section class="catalog-content">
+            <div class="sorting-bar">
+                <div class="sort-controls">
+                    <span class="sort-label">Сортировка:</span>
+                    <div class="sort-options">
+                        <a href="@Url.Action("Catalog", new { sortOrder = "price", category = Request.QueryString["category"], brand = Request.QueryString["brand"] })"
+                           class="sort-link @(Request.QueryString["sortOrder"] == "price" || string.IsNullOrEmpty(Request.QueryString["sortOrder"]) ? "active" : "")">по цене</a>
+
+                        <a href="@Url.Action("Catalog", new { sortOrder = "popularity", category = Request.QueryString["category"], brand = Request.QueryString["brand"] })"
+                           class="sort-link @(Request.QueryString["sortOrder"] == "popularity" ? "active" : "")">по популярности</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="catalog-grid">
+                @if (Model == null || !Model.Any())
+                {
+                    <p style="grid-column: span 3; text-align: center; padding: 40px;">Товары не найдены.</p>
+                }
+                else
+                {
+                    foreach (var item in Model)
+                    {
+                        <article class="product-item">
+                            <div class="product-img-box">
+                                <a href="@Url.Action("ProductDetails", "Home", new { id = item.Id })">
+                                    <img src="@Url.Content("~/Content/Images/" + item.ImageUrl)" alt="@item.Name" class="catalog-item-img" />
+                                </a>
+                            </div>
+                            <h3>
+                                <a href="@Url.Action("ProductDetails", "Home", new { id = item.Id })" class="product-link">@item.Name</a>
+                            </h3>
+                            <span class="product-price">@item.Price.ToString("N0") ₽</span>
+
+                            @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post))
+                            {
+                                <input type="hidden" name="productId" value="@item.Id" />
+                                <button type="submit" class="btn-to-cart">В корзину</button>
+                            }
+                        </article>
+                    }
+                }
+            </div>
+        </section>
+    </div>
+</main>

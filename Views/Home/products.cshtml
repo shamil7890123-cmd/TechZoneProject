@@ -1,0 +1,114 @@
+﻿@model IEnumerable<TechZoneProject.Models.Product>
+@{
+    ViewBag.Title = "Управление товарами";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>TZ ADMIN - Товары</title>
+    <link rel="stylesheet" href="~/Content/Товары (а).css">
+</head>
+<body class="admin-body">
+
+    <aside class="sidebar">
+        <div class="sidebar-header"><span class="admin-logo">TZ ADMIN</span></div>
+        <nav class="sidebar-nav">
+            <a href="@Url.Action("dashboard", "Home")" class="nav-item">📊 Дашборд</a>
+            <a href="@Url.Action("orders", "Home")" class="nav-item">📦 Заказы</a>
+            <a href="@Url.Action("products", "Home")" class="nav-item active">🖥 Товары</a>
+            <a href="@Url.Action("users", "Home")" class="nav-item">👥 Клиенты</a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <header class="page-header">
+            <h1 class="page-title">Управление товарами</h1>
+            <div class="header-actions">
+                <a href="@Url.Action("CreateProduct", "Home")" class="btn-primary" style="text-decoration:none;">
+                    + Добавить товар
+                </a>
+            </div>
+        </header>
+
+        <section class="white-card table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ФОТО</th>
+                        <th>НАИМЕНОВАНИЕ</th>
+                        <th>КАТЕГОРИЯ</th>
+                        <th>ЦЕНА</th>
+                        <th>ОСТАТОК</th> @* Добавлена колонка *@
+                        <th class="text-right">ДЕЙСТВИЯ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td><small class="text-muted">#@item.Id</small></td>
+                                <td>
+                                    <img src="~/Content/Images/@item.ImageUrl" alt="img" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; border: 1px solid #eee;">
+                                </td>
+                                <td>
+                                    <strong>@item.Name</strong>
+                                    <br />
+                                    <small style="color: #999; font-size: 0.8em;">@item.Processor</small>
+                                </td>
+                                <td><span class="badge-category">@item.Category</span></td>
+                                <td><span class="price-tag">@item.Price.ToString("N0") ₽</span></td>
+
+                                @* Визуальный контроль остатков *@
+                                <td>
+                                    @if (item.Stock <= 0)
+                                    {
+                                        <span style="color: #dc3545; font-weight: bold; padding: 4px 8px; background: #fff5f5; border-radius: 4px;">0 шт.</span>
+                                    }
+                                    else if (item.Stock < 5)
+                                    {
+                                        <span style="color: #fd7e14; font-weight: bold; padding: 4px 8px; background: #fff9f0; border-radius: 4px;">@item.Stock шт. (Мало)</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: #28a745; padding: 4px 8px; background: #f0fff4; border-radius: 4px;">@item.Stock шт.</span>
+                                    }
+                                </td>
+
+                                <td class="text-right">
+                                    <div class="action-group">
+                                        <a href="@Url.Action("EditProduct", "Home", new { id = item.Id })" class="btn-action gray" title="Редактировать">
+                                            ✏️
+                                        </a>
+
+                                        @using (Html.BeginForm("DeleteProduct", "Home", new { id = item.Id }, FormMethod.Post, new { style = "display:inline;", onsubmit = "return confirm('Вы действительно хотите удалить этот товар?');" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn-action red" title="Удалить">
+                                                🗑️
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" style="text-align:center; padding: 40px; color: #999;">
+                                <div style="font-size: 24px;">📦</div>
+                                <div>Список товаров пуст</div>
+                                <p><small>Попробуйте добавить новый товар через кнопку выше</small></p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

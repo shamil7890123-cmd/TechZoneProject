@@ -1,0 +1,91 @@
+﻿@model IEnumerable<TechZoneProject.Models.Product>
+@{
+    ViewBag.Title = "Главная";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="promo-banner" style="position: relative; overflow: hidden; padding: 0; min-height: 400px; display: flex; align-items: center; background: linear-gradient(135deg, #0052cc, #002d70);">
+    <div class="container" style="position: relative; width: 100%; display: flex; align-items: center; justify-content: space-between;">
+
+        <div class="promo-content" style="position: relative; z-index: 2; max-width: 650px; padding: 60px 0;">
+            <h1 style="font-size: 52px; font-weight: 900; line-height: 1.1; margin-bottom: 20px; color: white;">ВРЕМЯ ГЕЙМИНГА: -30%</h1>
+            <p style="font-size: 22px; opacity: 0.9; margin-bottom: 30px; color: white;">Профессиональная периферия для киберспорта. <br>Почувствуй разницу в каждом клике.</p>
+            <a href="@Url.Action("Catalog", "Home")" class="btn-more">Подробнее</a>
+        </div>
+
+        <div style="position: absolute; right: -60px; top: 0; bottom: 0; display: flex; align-items: center; z-index: 1;">
+            <img src="@Url.Content("~/Content/Images/pngtree-cyber-sport-isometric-png-image_12010298.png")"
+                 alt="Cyber Sport"
+                 style="height: 100%; width: auto; object-fit: cover; filter: drop-shadow(-30px 30px 60px rgba(0,0,0,0.5));">
+        </div>
+
+    </div>
+</section>
+
+<div class="container">
+    <main class="content-grid">
+        <section class="products-section">
+            <h2 class="title" style="margin-top: 40px;">Хиты продаж</h2>
+            <div class="products-flex">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <article class="item-card">
+                            <div class="item-img">
+                                <a href="@Url.Action("ProductDetails", "Home", new { id = item.Id })">
+                                    <img src="@Url.Content("~/Content/Images/" + item.ImageUrl)" alt="@item.Name" />
+                                </a>
+                            </div>
+                            <div class="item-info">
+                                <h3>@item.Name</h3>
+                                <span class="price">@item.Price.ToString("N0") ₽</span>
+
+                                @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post))
+                                {
+                                    <input type="hidden" name="productId" value="@item.Id" />
+                                    <button type="submit" class="btn-add">В корзину</button>
+                                }
+                            </div>
+                        </article>
+                    }
+                }
+                else
+                {
+                    <p style="padding: 20px;">На данный момент товаров нет.</p>
+                }
+            </div>
+        </section>
+
+        <aside class="reviews-section" style="margin-top: 40px;">
+            <h2 class="title">Отзывы</h2>
+            <div class="reviews-stack">
+                <div class="review-box">
+                    <strong>Артем К. <span class="stars">★★★★★</span></strong>
+                    <p>"Лучший магаз! Доставили до Ново-Ленино за час."</p>
+                </div>
+                <div class="review-box">
+                    <strong>Светлана Р. <span class="stars">★★★★★</span></strong>
+                    <p>"Клавиатура огонь, клики сочные. Рекомендую!"</p>
+                </div>
+                <div class="review-box">
+                    <strong>Алексей М. <span class="stars">★★★★★</span></strong>
+                    <p>"Брал системник ASUS — тянет всё на ультрах."</p>
+                </div>
+                <div class="review-box">
+                    <strong>Анастасия В. <span class="stars">★★★★★</span></strong>
+                    <p>"Заказывала ноутбук. Очень быстрая доставка."</p>
+                </div>
+                <div class="review-box">
+                    <strong>Вася П. <span class="stars">★★★★★</span></strong>
+                    <p>"Мышка PRO — это просто другой уровень точности в шутерах!"</p>
+                </div>
+                <div class="review-box">
+                    <strong>Никита С. <span class="stars">★★★★★</span></strong>
+                    <p>"Отличный сервис, помогли подобрать монитор под мои задачи."</p>
+                </div>
+                <button class="btn-review" onclick="location.href='@Url.Action("Reviews", "Home")'">Оставить отзыв</button>
+            </div>
+        </aside>
+    </main>
+</div>

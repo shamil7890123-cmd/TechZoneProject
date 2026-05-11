@@ -1,0 +1,125 @@
+﻿@model IEnumerable<TechZoneProject.Models.User>
+@{
+    ViewBag.Title = "Управление пользователями";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление пользователями - TZ ADMIN</title>
+    <link rel="stylesheet" href="~/Content/Пользователи(а).css">
+</head>
+<body class="admin-body">
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="admin-logo">TZ ADMIN</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="@Url.Action("Dashboard", "Home")" class="nav-item">📊 Дашборд</a>
+            <a href="@Url.Action("Orders", "Home")" class="nav-item">📦 Заказы</a>
+            <a href="@Url.Action("Products", "Home")" class="nav-item">🖥 Товары</a>
+            <a href="@Url.Action("Users", "Home")" class="nav-item active">👥 Клиенты</a>
+            <a href="@Url.Action("Settings", "Home")" class="nav-item">⚙️ Настройки</a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <header class="page-header">
+            <h1 class="page-title">Управление пользователями</h1>
+            <a href="@Url.Action("CreateUser", "Home")" class="btn-primary" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center;">
+                + Новый пользователь
+            </a>
+        </header>
+
+        @* Обновленная секция фильтров *@
+        <section class="white-card filter-panel">
+            @using (Html.BeginForm("Users", "Home", FormMethod.Get, new { @style = "display: flex; width: 100%; gap: 20px; align-items: center;" }))
+            {
+                <div class="search-container" style="flex-grow: 1; display: flex; align-items: center;">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" name="searchTerm" value="@ViewBag.CurrentSearch" placeholder="Поиск по логину или email..." style="border: none; outline: none; width: 100%; margin-left: 10px;">
+                </div>
+
+                <div class="select-wrapper">
+                    Роль:
+                    <select name="role" onchange="this.form.submit()" style="border: none; background: transparent; font-weight: bold; cursor: pointer; color: #333;">
+                        <option value="Все" @(ViewBag.CurrentRole == "Все" ? "selected" : "")>Все</option>
+                        <option value="Admin" @(ViewBag.CurrentRole == "Admin" ? "selected" : "")>Админ</option>
+                        <option value="User" @(ViewBag.CurrentRole == "User" ? "selected" : "")>Клиент</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-action blue" style="border: none; cursor: pointer;">Найти</button>
+                <a href="@Url.Action("Users", "Home")" class="btn-action" style="text-decoration: none; color: #666; background: #f5f5f5; display: flex; align-items: center; justify-content: center;">Сброс</a>
+            }
+        </section>
+
+        <section class="white-card table-wrapper">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>ПОЛЬЗОВАТЕЛЬ</th>
+                        <th>РОЛЬ</th>
+                        <th>ДАТА РЕГИСТРАЦИИ</th>
+                        <th>СТАТУС</th>
+                        <th class="text-right">ДЕЙСТВИЯ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="col-id">#@item.Id</td>
+                                <td class="col-user">
+                                    <div class="user-info">
+                                        <span class="user-name">@item.Login</span>
+                                        <span class="user-email">@item.Email</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="role-badge @(item.Role == "Admin" ? "admin" : "user")">
+                                        @(item.Role == "Admin" ? "Админ" : "Клиент")
+                                    </span>
+                                </td>
+                                <td>—</td>
+                                <td>
+                                    <span class="status-indicator online"></span> Активен
+                                </td>
+                                <td class="text-right" style="display: flex; justify-content: flex-end; gap: 5px;">
+                                    <a href="@Url.Action("EditUser", "Home", new { id = item.Id })" class="btn-action blue" style="text-decoration: none;">Ред.</a>
+
+                                    @using (Html.BeginForm("DeleteUser", "Home", new { id = item.Id }, FormMethod.Post, new { onsubmit = "return confirm('Удалить пользователя " + item.Login + "?');" }))
+                                    {
+                                        <button type="submit" class="btn-action red" style="cursor:pointer; border:none;">Удалить</button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 20px; color: #999;">Пользователи не найдены</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <footer class="table-footer">
+                <div class="per-page">
+                    Найдено: <span class="limit-box">@(Model != null ? Model.Count() : 0)</span>
+                </div>
+                <div class="pagination">
+                    <button class="page-btn active">1</button>
+                </div>
+            </footer>
+        </section>
+    </main>
+</body>
+</html>

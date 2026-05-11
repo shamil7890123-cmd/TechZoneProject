@@ -1,0 +1,126 @@
+﻿@model List<TechZoneProject.Models.Order>
+@{
+    ViewBag.Title = "Управление заказами";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Управление заказами - TZ ADMIN</title>
+    <link rel="stylesheet" href="/css/Главная.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="admin-body">
+
+    <!-- САЙДБАР -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="admin-logo">TZ ADMIN</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="@Url.Action("Dashboard", "Home")" class="nav-item">📊 Дашборд</a>
+            <a href="@Url.Action("Orders", "Home")" class="nav-item active">📦 Заказы</a>
+            <a href="@Url.Action("Products", "Home")" class="nav-item">🖥 Товары</a>
+            <a href="@Url.Action("Users", "Home")" class="nav-item">👥 Клиенты</a>
+            <a href="@Url.Action("Settings", "Home")" class="nav-item">⚙️ Настройки</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="admin-name">Администратор</div>
+            <div class="admin-role">TechZone Panel</div>
+        </div>
+    </aside>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
+    <main class="admin-main">
+        <div class="content-container">
+
+            <header class="page-header">
+                <h1 class="page-title">Управление заказами</h1>
+                <div class="header-actions">
+                    <button class="btn-outline">Экспорт CSV</button>
+                </div>
+            </header>
+
+            <!-- ПАНЕЛЬ ФИЛЬТРОВ -->
+            <section class="white-card filter-panel">
+                @using (Html.BeginForm("Orders", "Home", FormMethod.Get, new { style = "display: flex; flex-grow: 1; align-items: center;" }))
+                {
+                    <div class="search-container" style="flex-grow: 1;">
+                        <span class="search-icon">🔍</span>
+                        <input type="text"
+                               name="searchTerm"
+                               value="@ViewBag.CurrentFilter"
+                               placeholder="Поиск по номеру заказа или клиенту..."
+                               onchange="this.form.submit()">
+                    </div>
+                }
+
+                <div class="select-wrapper">
+                    Статус: <span class="select-text">Все</span>
+                </div>
+                <div class="select-wrapper">
+                    Период: <span class="select-text">За всё время</span>
+                </div>
+            </section>
+
+            <!-- ТАБЛИЦА -->
+            <section class="white-card main-table-card">
+                <div class="table-wrapper">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ДАТА / ИНФОРМАЦИЯ</th>
+                                <th>СУММА</th>
+                                <th>СТАТУС</th>
+                                <th class="text-right">ДЕЙСТВИЯ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var order in Model)
+                                {
+                                    <tr>
+                                        <td class="col-id">#@order.OrderNumber</td>
+                                        <td>
+                                            <div style="font-weight: 600; color: #111827;">@order.OrderDate.ToString("dd.MM.yyyy HH:mm")</div>
+                                            <div style="font-size: 13px; color: #6b7280;">Клиент: @order.CustomerName</div>
+                                        </td>
+                                        <td style="font-weight: 700;">@order.TotalAmount.ToString("N0") ₽</td>
+                                        <td><span class="order-badge paid">@order.Status</span></td>
+                                        <td class="text-right">
+                                            <button class="btn-action blue">Детали</button>
+                                            <button class="btn-action gray">Чек</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 40px; color: #6b7280;">
+                                        <div style="font-size: 18px; margin-bottom: 8px;">📦 Заказов пока нет</div>
+                                        <div>Как только клиенты оформят заказы, они появятся здесь.</div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <footer class="table-footer">
+                    <div class="per-page">
+                        Показывать по: <span class="limit-box">10</span>
+                    </div>
+                    <div class="pagination">
+                        <button class="page-btn active">1</button>
+                    </div>
+                </footer>
+            </section>
+        </div>
+    </main>
+</body>
+</html>

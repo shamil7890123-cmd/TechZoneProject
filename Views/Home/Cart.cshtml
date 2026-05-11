@@ -1,0 +1,130 @@
+﻿@model IEnumerable<TechZoneProject.Models.Product>
+@{
+    ViewBag.Title = "Корзина";
+    var counts = ViewBag.ProductCounts as Dictionary<int, int>;
+    decimal totalCartSum = 0;
+}
+
+<main class="container">
+    <h1 class="main-title">Корзина</h1>
+
+    @if (TempData["Message"] != null)
+    {
+        <div style="background-color: #dff0d8; color: #3c763d; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: center; border: 1px solid #d6e9c6;">
+            @TempData["Message"]
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="white-card" style="text-align: center; padding: 50px;">
+            <h2>Ваша корзина пуста</h2>
+            <p>Самое время добавить в неё что-нибудь интересное!</p>
+            <a href="@Url.Action("Catalog", "Home")" class="btn-submit" style="display:inline-block; margin-top:20px; text-decoration:none;">Перейти в каталог</a>
+        </div>
+    }
+    else
+    {
+        <div class="cart-layout">
+            <div class="cart-items">
+                @foreach (var item in Model)
+                {
+                    int quantity = counts != null && counts.ContainsKey(item.Id) ? counts[item.Id] : 1;
+                    decimal itemTotal = item.Price * quantity;
+                    totalCartSum += itemTotal;
+
+                    <div class="white-card product-item">
+                        <div class="product-info">
+                            <div class="product-img">
+                                <img src="@Url.Content("~/Content/Images/" + item.ImageUrl)" alt="@item.Name" style="width: 100%; height: 100%; object-fit: contain;">
+                            </div>
+                            <div>
+                                <p class="product-name">@item.Name</p>
+                                <p class="product-sku">Категория: @item.Category</p>
+                            </div>
+                        </div>
+                        <div class="product-controls">
+                            <div class="quantity-picker" style="display: flex; align-items: center; gap: 10px;">
+                                @using (Html.BeginForm("RemoveOneFromCart", "Home", FormMethod.Post, new { style = "display:inline;" }))
+                                {
+                                    <input type="hidden" name="productId" value="@item.Id" />
+                                    <button type="submit" class="btn-qty" style="cursor:pointer;">−</button>
+                                }
+                                <span>@quantity</span>
+                                @using (Html.BeginForm("AddToCart", "Home", FormMethod.Post, new { style = "display:inline;" }))
+                                {
+                                    <input type="hidden" name="productId" value="@item.Id" />
+                                    <button type="submit" class="btn-qty" style="cursor:pointer;">+</button>
+                                }
+                            </div>
+                            <p class="product-price">
+                                @if (quantity > 1)
+                                {
+                                    <span style="font-size: 0.8em; color: #888; display: block;">@item.Price.ToString("N0") ₽ / шт.</span>
+                                }
+                                @itemTotal.ToString("N0") ₽
+                            </p>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <aside class="cart-summary">
+                <div class="white-card">
+                    <h2 class="card-title">Итого</h2>
+                    <div class="summary-row">
+                        @{ var totalItemsCount = (Session["Cart"] as List<int>)?.Count ?? 0; }
+                        <span>Товары (@totalItemsCount)</span>
+                        <span>@totalCartSum.ToString("N0") ₽</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Доставка</span>
+                        <span class="free-text">Бесплатно</span>
+                    </div>
+                    <hr>
+                    <div class="summary-row total">
+                        <span>К оплате</span>
+                        <span>@totalCartSum.ToString("N0") ₽</span>
+                    </div>
+
+                    @using (Html.BeginForm("Checkout", "Home", FormMethod.Post))
+                    {
+                        <input type="hidden" name="totalSum" value="@totalCartSum" />
+                        <button type="submit" class="btn-submit full-width">Оформить заказ</button>
+                    }
+                </div>
+            </aside>
+        </div>
+    }
+
+    @if (Session["UserId"] != null)
+    {
+        <section class="order-history" style="margin-top: 50px;">
+            <h2 class="section-title">История заказов</h2>
+            @{
+                var history = ViewBag.OrderHistory as List<TechZoneProject.Models.Order>;
+            }
+
+            @if (history != null && history.Any())
+            {
+                foreach (var order in history)
+                {
+                    <div class="white-card history-item" style="margin-bottom: 15px; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
+                        <div class="history-info">
+                            <p class="history-id" style="font-weight: bold; margin: 0;">Заказ №@order.OrderNumber</p>
+                            <p style="margin: 5px 0; font-size: 0.9em; color: #666;">Дата: @order.OrderDate.ToString("dd.MM.yyyy HH:mm")</p>
+                            <p class="history-status" style="margin: 0;">Статус: <span style="color: #28a745;">@order.Status</span> | Сумма: @order.TotalAmount.ToString("N0") ₽</p>
+                        </div>
+                        <div class="history-actions">
+                            <a href="@Url.Action("Account", "Home")" class="details-link">В личный кабинет</a>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <p style="color: #888;">У вас пока нет оформленных заказов.</p>
+            }
+        </section>
+    }
+</main>

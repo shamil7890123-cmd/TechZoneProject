@@ -1,0 +1,138 @@
+﻿
+@{
+    ViewBag.Title = "dashboard";
+}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TZ ADMIN</title>
+    <link rel="stylesheet" href="Дашборт(а).css">
+</head>
+<body class="admin-body">
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="admin-logo">TZ ADMIN</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="@Url.Action("dashboard", "Home")" class="nav-item">📊 Дашборд</a>
+            <a href="@Url.Action("orders", "Home")" class="nav-item">📦 Заказы</a>
+            <a href="@Url.Action("products", "Home")" class="nav-item">🖥 Товары</a>
+            <a href="@Url.Action("users", "Home")" class="nav-item">👥 Клиенты</a>
+            <a href="@Url.Action("settings", "Home")" class="nav-item">⚙️ Настройки</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="admin-info">
+                <p class="admin-name">tech_root</p>
+                <p class="admin-role">Администратор</p>
+            </div>
+        </div>
+    </aside>
+
+    <main class="admin-main">
+        <header class="admin-header">
+            <h1 class="page-title">Обзор магазина</h1>
+        </header>
+
+        <div class="stats-grid">
+            <div class="white-card stat-card">
+                <p class="stat-label">Продажи за месяц</p>
+                <div class="stat-row">
+                    <h3 class="stat-value">2.4M ₽</h3>
+                    <span class="stat-change positive">+12%</span>
+                </div>
+            </div>
+            <div class="white-card stat-card">
+                <p class="stat-label">Новых заказов</p>
+                <h3 class="stat-value">142</h3>
+            </div>
+            <div class="white-card stat-card">
+                <p class="stat-label">Активных клиентов</p>
+                <h3 class="stat-value">893</h3>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="white-card chart-box">
+                <h3 class="card-title">Динамика продаж</h3>
+                <div class="visual-chart">
+                    <svg viewBox="0 0 500 200" preserveAspectRatio="none">
+                        <line x1="0" y1="180" x2="500" y2="180" stroke="#f1f3f5" stroke-width="1" />
+                        <line x1="0" y1="130" x2="500" y2="130" stroke="#f1f3f5" stroke-width="1" />
+                        <line x1="0" y1="80" x2="500" y2="80" stroke="#f1f3f5" stroke-width="1" />
+                        <path d="M0,160 Q50,150 100,170 T200,90 T300,130 T400,50 T500,70"
+                              fill="none" stroke="#0d6efd" stroke-width="3" />
+                        <circle cx="100" cy="170" r="4" fill="#0d6efd" />
+                        <circle cx="200" cy="90" r="4" fill="#0d6efd" />
+                        <circle cx="400" cy="50" r="4" fill="#0d6efd" />
+                    </svg>
+                    <div class="chart-labels">
+                        <span>Пн</span><span>Вт</span><span>Ср</span><span>Чт</span><span>Пт</span><span>Сб</span><span>Вс</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="white-card chart-box">
+                <h3 class="card-title">Статусы заказов</h3>
+                <div class="donut-chart-wrapper">
+                    <div class="donut-chart"></div>
+                </div>
+                <ul class="status-list">
+                    <li><span class="dot done"></span> Выполнено (70%)</li>
+                    <li><span class="dot process"></span> В обработке (20%)</li>
+                    <li><span class="dot return"></span> Возвраты (10%)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="dashboard-grid bottom">
+            <div class="white-card">
+                <h3 class="card-title">Последние заказы</h3>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Клиент</th>
+                            <th>Статус</th>
+                            <th>Сумма</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#45821</td>
+                            <td>Иванов И.</td>
+                            <td><span class="badge paid">Оплачен</span></td>
+                            <td>189 990 ₽</td>
+                        </tr>
+                        <tr>
+                            <td>#45822</td>
+                            <td>Петров А.</td>
+                            <td><span class="badge process">Ожидание</span></td>
+                            <td>54 990 ₽</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="white-card">
+                <h3 class="card-title">Топ продаж</h3>
+                <div class="top-item">
+                    <span>1. Intel Core i9-13900K</span>
+                    <span class="count">42 шт</span>
+                </div>
+                <div class="top-item">
+                    <span>2. NVIDIA RTX 4070 Ti</span>
+                    <span class="count">31 шт</span>
+                </div>
+                <div class="top-item">
+                    <span>3. DDR5 Kingston 32GB</span>
+                    <span class="count">19 шт</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+</html>

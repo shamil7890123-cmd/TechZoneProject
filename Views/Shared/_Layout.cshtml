@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - TechZone</title>
+    <link href="@Url.Content("~/Content/Главная.css")" rel="stylesheet" type="text/css" />
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="page-wrapper">
+        <header class="top-panel">
+            <div class="container flex-header">
+                <div class="logo">TechZone</div>
+                <div class="top-info">
+                    <span>📞 +7 (3952) 111-222</span>
+                    <a href="@Url.Action("Contacts", "Home")#map-section" style="text-decoration: none; color: inherit;">
+                        <span>📍 Иркутск, ул. Ленина, 11</span>
+                    </a>
+                </div>
+                <div class="top-actions">
+                    <div class="socials">
+                        <a href="#" class="soc-btn">VK</a>
+                        <a href="#" class="soc-btn">TG</a>
+                    </div>
+
+                    @{
+                        var cartCount = 0;
+                        if (Session["Cart"] != null)
+                        {
+                            var cart = (List<int>)Session["Cart"];
+                            cartCount = cart.Count;
+                        }
+                    }
+
+                    <a href="@Url.Action("Cart", "Home")" class="cart">🛒 Корзина (@cartCount)</a>
+
+                    @if (Session["UserId"] != null)
+                    {
+                        <a href="@Url.Action("Account", "Home")" class="btn-login">Личный кабинет</a>
+
+                        if (Session["UserRole"]?.ToString() == "Admin")
+                        {
+                            <a href="@Url.Action("Dashboard", "Home")" class="btn-login" style="background: #d9534f;">Админка</a>
+                        }
+
+                        <a href="@Url.Action("Logout", "Home")" class="btn-login" style="background: #777;">Выход</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Home")" class="btn-login">Вход</a>
+                    }
+                </div>
+            </div>
+        </header>
+
+        <nav class="main-nav">
+            <div class="container">
+                <ul class="nav-list">
+                    <li><a href="@Url.Action("Index", "Home")">Главная</a></li>
+                    <li><a href="@Url.Action("Catalog", "Home")">Каталог</a></li>
+                    <li><a href="@Url.Action("Reviews", "Home")">Отзывы</a></li>
+                    <li><a href="@Url.Action("Delivery", "Home")">Доставка</a></li>
+                    <li><a href="@Url.Action("Contacts", "Home")">Контакты</a></li>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="body-content">
+            @RenderBody()
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <p>© 2026 TechZone. Разработано в рамках ЛР БГУ. г. Иркутск, ул. Ленина, 11</p>
+            </div>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="@Url.Content("~/Scripts/site-logic.js")"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

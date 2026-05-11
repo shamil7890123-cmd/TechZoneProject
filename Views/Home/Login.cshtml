@@ -1,0 +1,66 @@
+﻿@model TechZoneProject.Models.User
+@{
+    ViewBag.Title = "Вход и Регистрация";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main class="container">
+    <div class="auth-grid">
+        <section class="white-card auth-card">
+            <h1 class="card-title">Вход</h1>
+            <p class="card-subtitle">Рады видеть вас снова!</p>
+
+            @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label>Логин</label>
+                    <input type="text" name="Login" class="login-input" required>
+                </div>
+                <div class="form-group">
+                    <div class="label-row">
+                        <label>Пароль</label>
+                        <a href="#" class="forgot-link">Забыли пароль?</a>
+                    </div>
+                    <input type="password" name="Password" class="pass-input" required>
+                </div>
+
+                <button type="submit" class="btn-primary full-width" style="padding: 10px 0;">Войти</button>
+
+                if (ViewBag.Error != null)
+                {
+                    <p style="color:red; margin-top:10px; font-size: 0.9em;">@ViewBag.Error</p>
+                }
+            }
+        </section>
+
+        <section class="white-card auth-card">
+            <h2 class="card-title">Регистрация</h2>
+            <p class="card-subtitle">Создайте аккаунт для покупок</p>
+
+            @using (Html.BeginForm("Register", "Home", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <label>Электронная почта</label>
+                    <input type="email" name="Email" required>
+                </div>
+                <div class="form-group">
+                    <label>Придумайте логин</label>
+                    <input type="text" name="Login" required>
+                </div>
+                <div class="form-group">
+                    <label>Придумайте пароль</label>
+                    <input type="password" name="Password" required>
+                </div>
+
+                <button type="submit" class="btn-dark full-width" style="padding: 10px 0;">Зарегистрироваться</button>
+
+                if (TempData["Error"] != null)
+                {
+                    <p style="color:red; margin-top:10px; font-size: 0.9em;">@TempData["Error"]</p>
+                }
+            }
+        </section>
+    </div>
+</main>

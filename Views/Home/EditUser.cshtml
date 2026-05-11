@@ -1,0 +1,45 @@
+﻿@model TechZoneProject.Models.User
+@{
+    ViewBag.Title = "Редактирование пользователя";
+}
+
+<div class="admin-main">
+    <header class="page-header">
+        <h1 class="page-title">Редактирование профиля: @Model.Login</h1>
+    </header>
+
+    <section class="white-card table-wrapper" style="padding: 30px; max-width: 600px;">
+        @using (Html.BeginForm("EditUser", "Home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @* Скрытое поле для сохранения ID пользователя *@
+            @Html.HiddenFor(m => m.Id)
+
+            <div style="margin-bottom: 20px;">
+                <label>Логин</label><br />
+                @Html.TextBoxFor(m => m.Login, new { @class = "search-container", style = "width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 8px;" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label>Email</label><br />
+                @Html.TextBoxFor(m => m.Email, new { @class = "search-container", style = "width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 8px;" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label>Пароль</label><br />
+                @Html.TextBoxFor(m => m.Password, new { @class = "search-container", style = "width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 8px;" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label>Роль</label><br />
+                @Html.DropDownListFor(m => m.Role, new SelectList(new[] { "User", "Admin" }), new { @class = "search-container", style = "width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 8px;" })
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button type="submit" class="btn-primary" style="border:none; cursor:pointer;">Сохранить изменения</button>
+                <a href="@Url.Action("Users", "Home")" class="btn-action" style="text-decoration:none; background:#eee; color:#333; display:flex; align-items:center; padding: 0 15px; border-radius: 8px;">Отмена</a>
+            </div>
+        }
+    </section>
+</div>

@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "settings";
+}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Настройки - TZ ADMIN</title>
+    <link rel="stylesheet" href="Настройки(а).css">
+</head>
+<body class="admin-body">
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <span class="admin-logo">TZ ADMIN</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="@Url.Action("dashboard", "Home")" class="nav-item">📊 Дашборд</a>
+            <a href="@Url.Action("orders", "Home")" class="nav-item">📦 Заказы</a>
+            <a href="@Url.Action("products", "Home")" class="nav-item">🖥 Товары</a>
+            <a href="@Url.Action("users", "Home")" class="nav-item">👥 Клиенты</a>
+            <a href="@Url.Action("settings", "Home")" class="nav-item">⚙️ Настройки</a>
+        </nav>
+    </aside>
+
+    <main class="admin-main">
+        <header class="page-header">
+            <h1 class="page-title">Настройки системы</h1>
+        </header>
+
+        <div class="settings-grid">
+            <section class="white-card settings-main">
+                <h3 class="settings-subtitle">Общие параметры</h3>
+
+                <div class="form-group">
+                    <label>Название магазина</label>
+                    <input type="text" value="TechZone Admin Panel">
+                </div>
+
+                <div class="form-group">
+                    <label>Контактный Email</label>
+                    <input type="email" value="admin@techzone.ru">
+                </div>
+
+                <div class="form-group">
+                    <label>Валюта магазина</label>
+                    <select class="admin-select-full">
+                        <option>Российский рубль (₽)</option>
+                        <option>Доллар США ($)</option>
+                        <option>Евро (€)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Текст уведомления при заказе</label>
+                    <textarea rows="4">Спасибо за ваш заказ! Мы свяжемся с вами в ближайшее время.</textarea>
+                </div>
+
+                <button class="btn-primary">Сохранить всё</button>
+            </section>
+
+            <aside class="settings-sidebar">
+                <section class="white-card security-card">
+                    <h3 class="settings-subtitle">Безопасность</h3>
+
+                    <div class="setting-toggle">
+                        <div class="toggle-info">
+                            <span class="toggle-title">2FA аутентификация</span>
+                            <span class="toggle-desc">Дополнительная защита</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="danger-zone">
+                        <span class="danger-title">Сбросить все данные</span>
+                        <p class="danger-desc">Это действие необратимо</p>
+                        <button class="btn-danger-outline">Очистить базу</button>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+</body>
+</html>

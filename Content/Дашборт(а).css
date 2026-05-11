@@ -1,0 +1,289 @@
+/* TechZone: Dashboard Styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body.admin-body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: #f4f7f9;
+    display: flex;
+    min-height: 100vh;
+    color: #1a1d21;
+}
+
+/* Боковая панель */
+.sidebar {
+    width: 260px;
+    background: #1a1d21;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100%;
+    z-index: 100;
+}
+
+.sidebar-header {
+    padding: 30px;
+    border-bottom: 1px solid #2d3238;
+}
+
+.admin-logo {
+    font-size: 22px;
+    font-weight: 800;
+    color: #0d6efd;
+    letter-spacing: 1px;
+}
+
+.sidebar-nav {
+    flex-grow: 1;
+    padding: 20px 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 30px;
+    color: #adb5bd;
+    text-decoration: none;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.nav-icon {
+    width: 24px;
+    margin-right: 12px;
+    display: inline-flex;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.nav-item:hover, .nav-item.active {
+    background: #2d3238;
+    color: white;
+    box-shadow: inset 4px 0 0 0 #0d6efd;
+}
+
+.sidebar-footer {
+    padding: 25px 30px;
+    background: #15171a;
+}
+
+.admin-name {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.admin-role {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+/* Основной контент */
+.admin-main {
+    margin-left: 260px;
+    flex-grow: 1;
+    padding: 40px;
+}
+
+.admin-header {
+    margin-bottom: 35px;
+}
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.white-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+/* Статистика */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.stat-label {
+    color: #868e96;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.stat-row {
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+}
+
+.stat-value {
+    font-size: 32px;
+    font-weight: 800;
+}
+
+.stat-change.positive {
+    color: #28a745;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Сетка дашборда */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 25px;
+}
+
+/* Графики */
+.visual-chart svg {
+    width: 100%;
+    height: 160px;
+    overflow: visible;
+}
+
+.chart-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    color: #adb5bd;
+    font-size: 12px;
+}
+
+.donut-chart-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 30px;
+}
+
+.donut-chart {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: conic-gradient(#28a745 0% 70%, #ffc107 70% 90%, #dc3545 90% 100%);
+    position: relative;
+}
+
+    .donut-chart::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100px;
+        height: 100px;
+        background: white;
+        border-radius: 50%;
+    }
+
+.status-list {
+    list-style: none;
+}
+
+    .status-list li {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        margin-bottom: 12px;
+        color: #495057;
+    }
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 12px;
+}
+
+    .dot.done {
+        background: #28a745;
+    }
+
+    .dot.process {
+        background: #ffc107;
+    }
+
+    .dot.return {
+        background: #dc3545;
+    }
+
+/* Таблицы и элементы */
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .admin-table th {
+        text-align: left;
+        color: #adb5bd;
+        font-size: 13px;
+        padding-bottom: 15px;
+        font-weight: 500;
+    }
+
+    .admin-table td {
+        padding: 18px 0;
+        border-top: 1px solid #f1f3f5;
+        font-size: 14px;
+    }
+
+.badge {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+    .badge.paid {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .badge.process {
+        background: #fff8e1;
+        color: #f57f17;
+    }
+
+.top-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 18px 0;
+    border-bottom: 1px solid #f1f3f5;
+    font-size: 14px;
+}
+
+    .top-item .count {
+        font-weight: 700;
+        color: #0d6efd;
+    }
+
+/* Адаптивность */
+@media (max-width: 1100px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-main {
+        padding: 20px;
+    }
+}

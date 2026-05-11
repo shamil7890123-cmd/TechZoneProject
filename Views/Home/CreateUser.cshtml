@@ -1,0 +1,52 @@
+﻿@model TechZoneProject.Models.User
+@{
+    ViewBag.Title = "Новый пользователь";
+}
+
+<div class="admin-main">
+    <header class="page-header">
+        <h1 class="page-title">Добавление пользователя</h1>
+    </header>
+
+    <section class="white-card table-wrapper" style="padding: 30px; max-width: 600px; margin-top: 20px;">
+        @using (Html.BeginForm("CreateUser", "Home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @* Вывод ошибки, если логин занят *@
+            @Html.ValidationSummary(true, "", new { @style = "color: #dc3545; margin-bottom: 15px; list-style: none; padding: 0; font-size: 14px;" })
+
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: bold; color: #555; display: block; margin-bottom: 5px;">Логин</label>
+                @Html.TextBoxFor(m => m.Login, new { @class = "search-container", style = "width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 8px; outline: none;" })
+                @Html.ValidationMessageFor(m => m.Login, "", new { @style = "color: #dc3545; font-size: 12px;" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: bold; color: #555; display: block; margin-bottom: 5px;">Email</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "search-container", style = "width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 8px; outline: none;", type = "email" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @style = "color: #dc3545; font-size: 12px;" })
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <label style="font-weight: bold; color: #555; display: block; margin-bottom: 5px;">Пароль</label>
+                @Html.PasswordFor(m => m.Password, new { @class = "search-container", style = "width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 8px; outline: none;" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @style = "color: #dc3545; font-size: 12px;" })
+            </div>
+
+            <div style="margin-bottom: 25px;">
+                <label style="font-weight: bold; color: #555; display: block; margin-bottom: 5px;">Роль</label>
+                @Html.DropDownListFor(m => m.Role, new SelectList(new[] { "User", "Admin" }), new { @class = "search-container", style = "width: 100%; border: 1px solid #ddd; padding: 10px; border-radius: 8px; cursor: pointer; background: white;" })
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <button type="submit" class="btn-primary" style="border: none; cursor: pointer; padding: 10px 25px; font-weight: bold;">
+                    Сохранить
+                </button>
+                <a href="@Url.Action("Users", "Home")" class="btn-action" style="text-decoration: none; background: #f5f5f5; color: #666; display: flex; align-items: center; padding: 0 20px; border-radius: 8px;">
+                    Отмена
+                </a>
+            </div>
+        }
+    </section>
+</div>

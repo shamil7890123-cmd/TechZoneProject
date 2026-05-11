@@ -1,0 +1,89 @@
+﻿@model TechZoneProject.Models.Product
+@{
+    ViewBag.Title = "Новый товар";
+}
+
+<main class="admin-main" style="padding: 20px;">
+    <h2>Добавление нового товара</h2>
+
+    @using (Html.BeginForm("CreateProduct", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="white-card" style="padding: 20px; display: flex; flex-direction: column; gap: 12px; max-width: 600px; border: 1px solid #ddd; border-radius: 8px;">
+
+            @Html.ValidationSummary(false, "Пожалуйста, проверьте данные:", new { @class = "text-danger", @style = "color:red; font-weight:bold;" })
+
+            <div class="form-group">
+                <label><b>Название товара</b></label>
+                @Html.EditorFor(m => m.Name, new { htmlAttributes = new { @class = "form-control", @style = "width:100%;" } })
+                @Html.ValidationMessageFor(m => m.Name, "", new { @style = "color:red" })
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div class="form-group">
+                    <label><b>Цена (₽)</b></label>
+                    @Html.EditorFor(m => m.Price, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(m => m.Price, "", new { @style = "color:red" })
+                </div>
+
+                @* --- НОВОЕ ПОЛЕ: ОСТАТОК НА СКЛАДЕ --- *@
+                <div class="form-group">
+                    <label><b>Кол-во на складе (шт.)</b></label>
+                    @Html.EditorFor(m => m.Stock, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0" } })
+                    @Html.ValidationMessageFor(m => m.Stock, "", new { @style = "color:red" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><b>Категория</b></label>
+                @Html.DropDownListFor(m => m.Category,
+                    new SelectList(new[] { "Ноутбуки", "ПК", "Телефоны", "Периферия" }),
+                    "Выберите категорию",
+                    new { @class = "form-control", @style = "width:100%;" })
+                @Html.ValidationMessageFor(m => m.Category, "", new { @style = "color:red" })
+            </div>
+
+            <hr />
+            <h4>Технические характеристики</h4>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                    <label>Процессор</label>
+                    @Html.EditorFor(m => m.Processor, new { htmlAttributes = new { @class = "form-control", @placeholder = "Например: Intel i5" } })
+                </div>
+                <div>
+                    <label>Видеокарта</label>
+                    @Html.EditorFor(m => m.VideoCard, new { htmlAttributes = new { @class = "form-control", @placeholder = "Например: RTX 3060" } })
+                </div>
+                <div>
+                    <label>ОЗУ (RAM)</label>
+                    @Html.EditorFor(m => m.RAM, new { htmlAttributes = new { @class = "form-control", @placeholder = "16 ГБ" } })
+                </div>
+                <div>
+                    <label>Диск (Storage)</label>
+                    @Html.EditorFor(m => m.Storage, new { htmlAttributes = new { @class = "form-control", @placeholder = "512 ГБ SSD" } })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label><b>Имя файла картинки</b></label>
+                @Html.EditorFor(m => m.ImageUrl, new { htmlAttributes = new { @class = "form-control", @placeholder = "Например: pc.jpg" } })
+                <small style="color: gray;">Убедитесь, что файл лежит в папке Content/Images</small>
+            </div>
+
+            <div class="form-group">
+                <label><b>Описание товара</b></label>
+                @Html.TextAreaFor(m => m.Description, new { @class = "form-control", @rows = 4, @style = "width:100%;" })
+                @Html.ValidationMessageFor(m => m.Description, "", new { @style = "color:red" })
+            </div>
+
+            <div style="margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px;">
+                <button type="submit" class="btn-primary" style="background: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+                    ✅ Сохранить товар
+                </button>
+                <a href="@Url.Action("products")" style="margin-left: 15px; color: #666; text-decoration: none;">Отмена</a>
+            </div>
+        </div>
+    }
+</main>
