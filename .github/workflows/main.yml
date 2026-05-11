@@ -8,8 +8,7 @@ jobs:
   build:
     runs-on: windows-2022
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
     - name: Setup MSBuild
       uses: microsoft/setup-msbuild@v2
@@ -20,30 +19,13 @@ jobs:
     - name: Restore
       run: nuget restore TechZoneProject.sln
 
-    - name: Build and Publish
-      # Света, здесь мы создаем папку прямо в корне сервера
-      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="${{ github.workspace }}\publish\\" /p:VisualStudioVersion="17.0"
+    - name: Build
+      # Мы создаем папку прямо в корне, чтобы GitHub её точно увидел
+      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="${{ github.workspace }}\publish\\"
 
-    - name: Upload artifact
+    - name: Upload
       uses: actions/upload-artifact@v4
       with:
         name: published-app
-        # Теперь путь максимально простой и короткий
-        path: publish\
+        path: publish/
         if-no-files-found: error
-
-  docker:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-
-    - name: Download artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: published-app
-        path: bin/Release/Publish/
-
-    - name: Build Docker Image
-      run: docker build -t techzone-app:latest .
