@@ -23,25 +23,15 @@ jobs:
       run: nuget restore TechZoneProject.sln
 
     - name: Build and Publish
-      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="bin\\app.publish\\" /p:VisualStudioVersion="17.0"
-
-    - name: Расширенная диагностика
-      run: |
-        Write-Host "=== Текущая директория ==="
-        Get-Location
-        Write-Host "`n=== ВСЕ папки в проекте ==="
-        Get-ChildItem -Recurse -Directory | Select-Object FullName
-        Write-Host "`n=== Поиск .dll файлов (должны быть после публикации) ==="
-        Get-ChildItem -Recurse -Filter "*.dll" | Select-Object -First 20 FullName
-        Write-Host "`n=== Поиск .aspx или .config файлов ==="
-        Get-ChildItem -Recurse -Filter "*.aspx" | Select-Object -First 10 FullName
-        Get-ChildItem -Recurse -Filter "web.config" | Select-Object FullName
+      # Используем твой новый подход с четкой папкой публикации
+      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="publish_output\\" /p:VisualStudioVersion="17.0"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: published-app
-        path: TechZoneProject/bin/app.publish/
+        # GitHub найдет папку publish_output внутри папки проекта
+        path: TechZoneProject/publish_output/
         if-no-files-found: error
 
   docker:
@@ -55,10 +45,7 @@ jobs:
       uses: actions/download-artifact@v4
       with:
         name: published-app
-        path: app.publish/
-
-    - name: List downloaded files
-      run: ls -la app.publish/
+        path: bin/Release/Publish/
 
     - name: Build Docker Image
       run: docker build -t techzone-app:latest .
