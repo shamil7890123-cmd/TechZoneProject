@@ -1,5 +1,5 @@
-﻿FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019
+FROM mcr.microsoft.com/dotnet/framework/aspnet:4.8-windowsservercore-ltsc2019
 
 WORKDIR /inetpub/wwwroot
 
-COPY ./bin/Release/Publish/ .
+COPY bin/Release/Publish/ .
