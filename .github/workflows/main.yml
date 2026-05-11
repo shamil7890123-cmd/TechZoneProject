@@ -20,12 +20,16 @@ jobs:
       run: nuget restore TechZoneProject.sln
 
     - name: Build
-      # Мы создаем папку прямо в корне, чтобы GitHub её точно увидел
-      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="${{ github.workspace }}\publish\\"
+      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="out\\"
 
-    - name: Upload
+    - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: published-app
-        path: publish/
+        # Света, этот путь найдет ВСЁ, что похоже на результат сборки
+        path: |
+          **/out/**
+          **/app.publish/**
+          **/*.config
+          **/*.dll
         if-no-files-found: error
