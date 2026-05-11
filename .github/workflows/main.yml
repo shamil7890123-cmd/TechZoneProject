@@ -7,10 +7,10 @@ on:
     branches: [ "master" ]
 
 jobs:
-  build-and-publish:
+  build:
     runs-on: windows-2022
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v4
 
     - name: Setup MSBuild
@@ -19,24 +19,24 @@ jobs:
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v2
       
-    - name: Restore NuGet packages
+    - name: Restore
       run: nuget restore TechZoneProject.sln
 
     - name: Build and Publish
-      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="${{ github.workspace }}\publish\" /p:VisualStudioVersion="17.0"
+      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="bin\\app.publish\\" /p:VisualStudioVersion="17.0"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: published-app
-        path: publish\
+        path: TechZoneProject/bin/app.publish/
         if-no-files-found: error
 
-  containerize:
-    needs: build-and-publish
+  docker:
+    needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repository
+    - name: Checkout
       uses: actions/checkout@v4
 
     - name: Download artifact
@@ -44,9 +44,6 @@ jobs:
       with:
         name: published-app
         path: bin/Release/Publish/
-
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
 
     - name: Build Docker Image
       run: docker build -t techzone-app:latest .
