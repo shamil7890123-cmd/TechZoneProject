@@ -19,12 +19,15 @@ jobs:
 
     - name: Setup NuGet
       uses: NuGet/setup-nuget@v1
+      
+    - name: Install NuGet Packages
+      run: nuget install TechZoneProject/packages.config -OutputDirectory packages
 
     - name: Restore NuGet packages
       run: nuget restore TechZoneProject.sln
 
     - name: Build Solution
-      run: msbuild TechZoneProject.sln /t:Clean,Restore,Build /p:Configuration=Release /p:VisualStudioVersion="17.0" /p:SkipInvalidConfigurations=true
+      run: msbuild TechZoneProject.sln /t:Clean,Restore,Build /p:Configuration=Release /p:VisualStudioVersion="17.0"
 
     - name: Containerize Application
       run: docker build -t techzone-app:latest .
