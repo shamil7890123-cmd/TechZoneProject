@@ -1,4 +1,4 @@
-﻿name: TechZone CI-CD
+name: TechZone CI-CD
 
 on:
   push:
@@ -8,19 +8,23 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Setup .NET Environment
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: '6.0.x'
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1.1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1
+
+    - name: Restore NuGet packages
+      run: nuget restore TechZoneProject.sln
 
     - name: Build Solution
-      run: dotnet build --configuration Release
+      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:VisualStudioVersion="17.0"
 
     - name: Containerize Application
       run: docker build -t techzone-app:latest .
