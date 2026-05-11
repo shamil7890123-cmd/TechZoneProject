@@ -1,4 +1,5 @@
 name: TechZone CI-CD
+
 on:
   push:
     branches: [ "master" ]
@@ -27,39 +28,6 @@ jobs:
 
     - name: Build and Publish Solution
       run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishUrl="bin/Release/Publish/" /p:VisualStudioVersion="17.0"
-
-    - name: Containerize Application
-      run: docker build -t techzone-app:latest .name: TechZone CI-CD
-
-
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-jobs:
-  build:
-    runs-on: windows-2022
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1.1
-
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1
-      
-    - name: Install NuGet Packages
-      run: nuget install TechZoneProject/packages.config -OutputDirectory packages
-
-    - name: Restore NuGet packages
-      run: nuget restore TechZoneProject.sln
-
-    - name: Build Solution
-      run: msbuild TechZoneProject.sln /t:Clean,Restore,Build /p:Configuration=Release /p:VisualStudioVersion="17.0"
 
     - name: Containerize Application
       run: docker build -t techzone-app:latest .
