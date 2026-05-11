@@ -26,7 +26,6 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: published-app
-        # Света, этот путь найдет ВСЁ, что похоже на результат сборки
         path: |
           **/out/**
           **/app.publish/**
