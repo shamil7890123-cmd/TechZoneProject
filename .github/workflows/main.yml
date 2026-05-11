@@ -24,7 +24,7 @@ jobs:
       run: nuget restore TechZoneProject.sln
 
     - name: Build Solution
-      run: msbuild TechZoneProject.sln /t:Restore,Build /p:Configuration=Release /p:VisualStudioVersion="17.0"
+      run: msbuild TechZoneProject.sln /t:Clean,Restore,Build /p:Configuration=Release /p:VisualStudioVersion="17.0" /p:SkipInvalidConfigurations=true
 
     - name: Containerize Application
       run: docker build -t techzone-app:latest .
