@@ -23,13 +23,15 @@ jobs:
       run: nuget restore TechZoneProject.sln
 
     - name: Build and Publish
-      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="bin\\app.publish\\" /p:VisualStudioVersion="17.0"
+      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:WebPublishMethod=FileSystem /p:publishUrl="out\\" /p:VisualStudioVersion="17.0"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: published-app
-        path: TechZoneProject/bin/app.publish/
+        path: |
+          TechZoneProject/out/
+          **/bin/app.publish/
         if-no-files-found: error
 
   docker:
