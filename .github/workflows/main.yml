@@ -29,5 +29,9 @@ jobs:
     - name: Build and Publish Solution
       run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishUrl="bin/Release/Publish/" /p:VisualStudioVersion="17.0"
 
+    - name: Switch to Linux containers
+      run: |
+        & "C:\Program Files\Docker\Docker\DockerCli.exe" -SwitchLinuxEngine
+
     - name: Containerize Application
       run: docker build -t techzone-app:latest .
