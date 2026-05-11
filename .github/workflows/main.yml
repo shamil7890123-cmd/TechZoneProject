@@ -23,13 +23,16 @@ jobs:
       run: nuget restore TechZoneProject.sln
 
     - name: Build and Publish
-      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishUrl="publish/" /p:VisualStudioVersion="17.0"
+      # Я изменила путь на абсолютный внутри рабочего каталога
+      run: msbuild TechZoneProject.sln /p:Configuration=Release /p:DeployOnBuild=true /p:PublishUrl="${{ github.workspace }}\publish\" /p:VisualStudioVersion="17.0"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: published-app
-        path: TechZoneProject/publish/
+        # Загружаем из корня, где MSBuild создал папку
+        path: publish/
+        if-no-files-found: error
 
   containerize:
     needs: build-and-publish
